@@ -1,6 +1,7 @@
 const { calculateProposedPositions } = require("./moveShipListeners");
 const { calculateCollisions } = require("./moveShipListeners");
 const { establishShip } = require("./positionShips");
+const { checkValidPosition } = require("./moveShipListeners");
 
 //Test calculate proposed positions function
 
@@ -19,12 +20,12 @@ test("Test calculate Collisions function", () => {
   let rows = [8, 8];
   let columns = [3, 5];
   let ship1 = {
-    occupiedRows: [2, 6],
-    occupiedColumns: [4, 4],
+    occupiedRows: [8, 8],
+    occupiedColumns: [4, 8],
   };
   let ship2 = {
-    occupiedRows: [6, 9],
-    occupiedColumns: [5, 5],
+    occupiedRows: [2, 2],
+    occupiedColumns: [1, 4],
   };
   let shipList = [ship1, ship2];
   const result = calculateCollisions(rows, columns, shipList);
@@ -42,3 +43,8 @@ test("Tests initializeShipLocations constructor", () => {
  initializeShipLocations(battleShip);
   expect(battleShip.occupiedRows).toEqual([1, 1]);
 });
+
+test("test the check valid positon function")
+{
+  
+}

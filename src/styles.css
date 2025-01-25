@@ -7,10 +7,11 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    gap: 16px;
 }
 /* Setting up the game board */
 /* This just sets up the background */
-#aspec-ratio-box
+.aspec-ratio-box
 {
     display: flex;
     justify-content: center;
@@ -25,7 +26,7 @@
 
 
 
-#backgroundBoard
+.backgroundBoardClass
 {
     display: grid;
     min-width: 300px;
@@ -37,9 +38,11 @@
     grid-template-columns: repeat(10, 1fr);
     grid-template-rows: repeat(10, 1fr);
     border: 1px solid rgb(0, 0, 255);
+
+    
     
 }
-#backgroundBoard div{
+.backgroundBoardClass div{
 
     display: block;
     width: 100%;
@@ -49,6 +52,7 @@
     box-sizing: border-box;
     content: '';
 }
+
 
 /* Sets up an invisible gameboard. This is the actual board you will play on */
 
@@ -128,8 +132,27 @@
 {
     font-weight: bold;
     font-size: 32px;
+    height: 40px;
 
 }
 body{
     background-image: linear-gradient(to right,rgb(153, 153, 255),#b5ffb5);
+}
+#start
+{
+    border-radius: 16px;
+    border: rgb(5, 139, 0) 4px dashed;
+    background-color: rgb(137, 240, 128);
+    height: 32px;
+    margin: 5px;
+    text-align: center;
+    align-content: center;
+    width: 20ch;
+    justify-self: center;
+}
+#start:hover{
+    border: rgb(5, 139, 0) 4px solid;
+    background-color: rgb(3, 107, 21);
+   
+
 }

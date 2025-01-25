@@ -15,6 +15,8 @@ import {
   populateGrid,
 } from "./positionShips";
 import { moveShip } from "./moveShipListeners";
+import { establishComputerShips } from "./computerShips";
+import { startGame } from "./startGame";
 
 //initialize ship objects.
 const battleShip = new establishShip(
@@ -48,15 +50,22 @@ let shipList = [battleShip, destroyer, carrier, submarine, scout];
 const gameText = document.querySelector("#gameText");
 const userBoard = document.querySelector("#UserBoard");
 
+
 //Initializes the grid background
-populateGrid("#backgroundBoard", 10);
+populateGrid("#backgroundBoard", 10,true);
 shipList.forEach((item) =>
   userBoard.appendChild(initializeShipLocations(item))
 );
 
+
+//Initialize the computer board
+populateGrid("#backgroundBoardComputer", 10,false);
+
 //Selects all the cells on the grid. Used for visuals
-const cells = document.querySelectorAll(".cell");
+const cells = document.querySelectorAll(".userCell");
+const computerCells = document.querySelectorAll(".computerCell");
 //Button used to rotate the ships
+
 const rotateButton = document.querySelector("#rotate");
 //Select the buttons that will be used to position each ship
 const pBattleship = document.querySelector("#pbattleship");
@@ -98,3 +107,9 @@ pScout.addEventListener("click", () => {
     {button.style.display = "none";})
   moveShip(scout, cells, rotateButton, gameText, shipList);
 });
+
+let computerShipList = establishComputerShips();
+console.log(computerShipList)
+
+const startButton = document.querySelector("#start");
+startButton.addEventListener("click",()=> startGame(gameText,cells,computerCells,shipList,computerShipList));
