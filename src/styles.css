@@ -70,7 +70,7 @@
     pointer-events: none;
 }
 
-#positionShips > div{
+#positionShips > div:not(#rotate){
     border-radius: 16px;
     border: darkred 4px dashed;
     background-color: lightcoral;
@@ -78,9 +78,9 @@
     margin: 5px;
     text-align: center;
     align-content: center;
-    max-width: 66ch;
+    width: 20ch;
 }
-#positionShips > div:hover{
+#positionShips > div:not(#rotate):hover{
     border: darkred 4px solid;
     background-color: rgb(241, 78, 78);
 
@@ -88,4 +88,48 @@
 #gameText
 {
     text-align: center;
+}
+#rotate
+{
+    border-radius: 16px;
+    border: rgb(5, 139, 0) 4px dashed;
+    background-color: rgb(137, 240, 128);
+    height: 32px;
+    margin: 5px;
+    text-align: center;
+    align-content: center;
+    width: 20ch;
+    display: none;
+}
+#rotate:hover{
+    border: rgb(5, 139, 0) 4px solid;
+    background-color: rgb(3, 107, 21);
+   
+
+}
+#positionShips
+{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-self: stretch;
+}
+
+.flash-green
+{
+    background-color: rgb(50, 248, 0);
+}
+.flash-red
+{
+    background-color: red;
+}
+
+#gameText
+{
+    font-weight: bold;
+    font-size: 32px;
+
+}
+body{
+    background-image: linear-gradient(to right,rgb(153, 153, 255),#b5ffb5);
 }

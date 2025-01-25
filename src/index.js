@@ -1,140 +1,100 @@
 import "./styles.css";
 import Battleship from "../imgs/battleship.png";
 import Destroyer from "../imgs/Destroyer.png";
-import Scout from "../imgs/scount.png";
+import Scout from "../imgs/scout.png";
 import Carrier from "../imgs/carrier.png";
 import Submarine from "../imgs/submarine.png";
-//Initalize ship objects.
+import Submarine90deg from "../imgs/submarine90deg.png";
+import Carrier90deg from "../imgs/carrier90deg.png";
+import Scout90deg from "../imgs/scout90deg.png";
+import Destroyer90deg from "../imgs/Destroyer90deg.png";
+import Battleship90deg from "../imgs/battleship90deg.png";
+import {
+  establishShip,
+  initializeShipLocations,
+  populateGrid,
+} from "./positionShips";
+import { moveShip } from "./moveShipListeners";
 
-//Used to test if a ship is in hand. Used for repositioning the ships on the grid
-let shipInHand = true;
-let newPositionX = 0;
-let newPositionY = 0;
-function establishShip(name, length, image) {
-  this.name = name;
-  this.length = length;
-  this.image = image;
-}
+//initialize ship objects.
+const battleShip = new establishShip(
+  "BattleShip",
+  4,
+  Battleship,
+  Battleship90deg,
+  1
+);
+const destroyer = new establishShip(
+  "Destroyer",
+  3,
+  Destroyer,
+  Destroyer90deg,
+  2
+);
+const carrier = new establishShip("Carrier", 5, Carrier, Carrier90deg, 3);
+const submarine = new establishShip(
+  "Submarine",
+  3,
+  Submarine,
+  Submarine90deg,
+  4
+);
+const scout = new establishShip("Scout", 2, Scout, Scout90deg, 5);
 
-const battleShip = new establishShip("BattleShip", 4, Battleship);
-const destroyer = new establishShip("Destroyer", 3, Destroyer);
-const carrier = new establishShip("Carrier", 5, Carrier);
-const submarine = new establishShip("Submarine", 3, Submarine);
-const scout = new establishShip("Scout", 2, Scout);
+//Will be used to check what ships are alive.
+let shipList = [battleShip, destroyer, carrier, submarine, scout];
 
+//Will be used to display vital information for the game
 const gameText = document.querySelector("#gameText");
+const userBoard = document.querySelector("#UserBoard");
 
+//Initializes the grid background
+populateGrid("#backgroundBoard", 10);
+shipList.forEach((item) =>
+  userBoard.appendChild(initializeShipLocations(item))
+);
 
-
-function populateGrid() {
-  //used to initalize the grid with blank divs for appearnce
-  const userBoard = document.querySelector("#backgroundBoard");
-  const gridSize = 10; // 10x10 grid
-
-  for (let i = 0; i < gridSize * gridSize; i++) {
-    const cell = document.createElement("div");
-    //sets the grid row and column location
-    const row = Math.floor(i / gridSize) + 1;
-    const column = (i % gridSize) + 1;
-
-    cell.style.gridColumn = column;
-    cell.style.gridRow = row;
-    cell.classList.add("cell");
-
-    userBoard.appendChild(cell);
-  }
-}
-
-function initalizeShipLocations(startRow, shipType) {
-  const userBoard = document.querySelector("#UserBoard");
-  const ship = document.createElement("img");
-  shipType.shipimg = ship;
-  ship.src = shipType.image;
-  ship.alt = shipType.name;
-  ship.style.gridColumn = `1 / ${shipType.length + 1}`;
-  ship.style.gridRow = `${startRow}`;
-  ship.style.width = "100%";
-  ship.style.height = "auto";
-  ship.style.objectFit = "cover";
-  ship.style.position = "absolute";
-  userBoard.appendChild(ship);
-}
-
-populateGrid();
-initalizeShipLocations(1, battleShip);
-initalizeShipLocations(2, destroyer);
-initalizeShipLocations(3, carrier);
-initalizeShipLocations(4, submarine);
-initalizeShipLocations(5, scout);
-
-
+//Selects all the cells on the grid. Used for visuals
+const cells = document.querySelectorAll(".cell");
+//Button used to rotate the ships
+const rotateButton = document.querySelector("#rotate");
+//Select the buttons that will be used to position each ship
 const pBattleship = document.querySelector("#pbattleship");
-pBattleship.addEventListener("click", () => moveShip(battleShip));
+pBattleship.addEventListener("click", () => {
+  const positionButtons = document.querySelectorAll(".positionButton");
+  positionButtons.forEach((button) => 
+    {button.style.display = "none";})
+  moveShip(battleShip, cells, rotateButton, gameText, shipList);
+});
 
 const pDestroyer = document.querySelector("#pdestroyer");
-pDestroyer.addEventListener("click", () => moveShip(destroyer));
+pDestroyer.addEventListener("click", () => {
+  const positionButtons = document.querySelectorAll(".positionButton");
+  positionButtons.forEach((button) => 
+    {button.style.display = "none";})
+  moveShip(destroyer, cells, rotateButton, gameText, shipList);
+});
 
 const pCarrier = document.querySelector("#pcarrier");
-pCarrier.addEventListener("click", () => moveShip(carrier));
+pCarrier.addEventListener("click", () => {
+  const positionButtons = document.querySelectorAll(".positionButton");
+  positionButtons.forEach((button) => 
+    {button.style.display = "none";})
+  moveShip(carrier, cells, rotateButton, gameText, shipList);
+});
 
 const pSubmarine = document.querySelector("#psubmarine");
-pSubmarine.addEventListener("click", () => moveShip(submarine));
+pSubmarine.addEventListener("click", () => {
+  const positionButtons = document.querySelectorAll(".positionButton");
+  positionButtons.forEach((button) => 
+    {button.style.display = "none";})
+  moveShip(submarine, cells, rotateButton, gameText, shipList);
+});
 
 const pScout = document.querySelector("#pscout");
-pScout.addEventListener("click", () => moveShip(scout));
-
-
-function moveShip(shipSelected) {
-  const cell = document.querySelectorAll(".cell");
-
-  // Create a map to store event handlers for each element
-  const eventHandlers = new Map();
-
-  cell.forEach((element) => {
-    // Define the event listeners
-    const enterCell = () => {
-      element.style.backgroundColor = "blue";
-    };
-
-    const leaveCell = () => {
-      element.style.backgroundColor = "rgb(0, 231, 231)";
-    };
-    const clickOnCell = () => {
-      element.style.backgroundColor = "rgb(0, 231, 231)";
-      shipInHand = false;
-      // Remove all event listeners from all cells
-      cell.forEach((cellElement) => {
-        const handlers = eventHandlers.get(cellElement);
-        if (handlers) {
-          cellElement.removeEventListener("mouseenter", handlers.enterCell);
-          cellElement.removeEventListener("mouseleave", handlers.leaveCell);
-          cellElement.removeEventListener("click", handlers.clickOnCell);
-        }
-        let column = parseInt(element.style.gridColumn.split("/")[0], 10); 
-        let row = parseInt(element.style.gridRow, 10);
-        console.log(`Mouse entered cell at column ${column}, row ${row}`);
-        positionShip(shipSelected,column,row);
-      });
-
-      // Clear the map of event handlers
-      eventHandlers.clear();
-    };
-
-    // Store the handlers for this element in the map
-    eventHandlers.set(element, { enterCell, leaveCell, clickOnCell });
-
-    // Add event listeners to the element
-    element.addEventListener("mouseenter", enterCell);
-    element.addEventListener("mouseleave", leaveCell);
-    element.addEventListener("click", clickOnCell);
-
-
-  });
-}
-
-function positionShip(shipType,column,row)
-{
-  console.log(shipType.length);
-  shipType.shipimg.style.gridColumn = `${column}/${shipType.length + column}`;
-  shipType.shipimg.style.gridRow = `${row}/${row}`;
-}
+pScout.addEventListener("click", () => {
+  const positionButtons = document.querySelectorAll(".positionButton");
+  positionButtons.forEach((button) => 
+    {button.style.display = "none";})
+  moveShip(scout, cells, rotateButton, gameText, shipList);
+});
