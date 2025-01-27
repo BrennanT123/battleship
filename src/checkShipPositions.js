@@ -48,7 +48,7 @@ function moveShip(shipSelected, cell, rotateButton, instructions, shipList) {
       const columns = calculatedPositions[1];
 
       //Checks to see if there are collisions
-      if (calculateCollisions(rows, columns, shipList,shipSelected) === true) {
+      if (calculateCollisions(rows, columns, shipList,shipSelected).doesCollide === true) {
         instructions.textContent = "Invalid position";
         instructions.classList.add("flash-red");
         setTimeout(() => {
@@ -112,7 +112,7 @@ function checkValidPosition(row, column, shipSelected) {
   }
 }
 
-
+/* 
 function calculateCollisions(rows, columns, shipList,shipSelected) {
   return shipList.some((element) => {
     
@@ -126,7 +126,7 @@ function calculateCollisions(rows, columns, shipList,shipSelected) {
     //Check for overlap in columns
     const columnsOverlap =
       columns[0] < element.occupiedColumns[1] && columns[1] > element.occupiedColumns[0];
-
+      console.log(rowsOverlap && columnsOverlap)
       if(rowsOverlap && columnsOverlap)
       {
         console.log(element.name);
@@ -139,6 +139,41 @@ function calculateCollisions(rows, columns, shipList,shipSelected) {
     //Return true only if there's actual overlap, not just touching
     return rowsOverlap && columnsOverlap;
   });
+}
+ */
+
+function calculateCollisions(rows, columns, shipList,shipSelected) {
+  let shipCollided = null;
+  const doesCollide = shipList.some((element) => {
+    
+    if((element.occupiedColumns === null && element.occupiedRows === null)||element.name === shipSelected.name)
+    {
+      return;
+    }
+    //Check for overlap in rows
+
+    const rowsOverlap =
+      rows[0] < element.occupiedRows[1] && rows[1] > element.occupiedRows[0];
+    //Check for overlap in columns
+    const columnsOverlap =
+      columns[0] < element.occupiedColumns[1] && columns[1] > element.occupiedColumns[0];
+/*       console.log(rowsOverlap && columnsOverlap) */
+      if(rowsOverlap && columnsOverlap)
+      {
+/*         console.log(element.name);
+        console.log(element.occupiedColumns);
+        console.log(element.occupiedRows);
+        console.log(shipSelected.name);
+        console.log(columns);
+        console.log(rows); */
+        shipCollided = element;
+      }
+
+    //Return true only if there's actual overlap, not just touching
+    return rowsOverlap && columnsOverlap;
+  });
+
+  return {doesCollide,shipCollided};
 }
 
 

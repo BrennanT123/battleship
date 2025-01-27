@@ -1,11 +1,11 @@
-import { aimShot,checkShot } from "./shotLogic";
+import { takeShot, computerShot,nextTurn } from "./shotLogic";
 
 //Clears placement buttons and starts game logic
 function startGame(
   instructions,
   userGrid,
   computerGrid,
-  shipList,
+  userShipList,
   computerShipList
 ) {
   let previousComputerShot = false;
@@ -18,16 +18,24 @@ function startGame(
   startButton.style.display = "none";
   instructions.textContent = "User's shot"
 
-  //UserShot
- aimShot(computerGrid,instructions,computerShipList);
 
 
-  setTimeout(() => {
-    instructions.textContent = "Computer is taking a shot..."
-  }, 3000);
-  //ComputerShot
+  //initialize object for the last computer shot 
+  let lastComputerShot = 
+  {
+    didHit: false,
+    shipHit: null
+  }
+
+
+  //Start game loop by sending all the necesary variables to the shot logic functions
+takeShot(lastComputerShot,userShipList,instructions,userGrid,computerGrid,computerShipList);
+
+
+
   
   
 }
+
 
 export { startGame };

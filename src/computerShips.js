@@ -1,5 +1,5 @@
-import { calculateCollisions, moveShip, positionShip,calculateProposedPositions,checkValidPosition } from "./moveShipListeners";
-import { establishShip } from "./positionShips";
+import { calculateCollisions, moveShip, positionShip,calculateProposedPositions,checkValidPosition } from "./checkShipPositions";
+import { establishShip } from "./establishShips";
 
 function initializeComputerShips(shipType,shipList)
 {
@@ -24,11 +24,11 @@ function initializeComputerShips(shipType,shipList)
         if (checkValidPosition(rows[0], columns[0], shipType) === false) {
             continue;
           }
-          if (calculateCollisions(rows, columns, shipList,shipType) === true) {
+          if (calculateCollisions(rows, columns, shipList,shipType).doesCollide === true) {
         continue;  
         }
           validPositionCheck = true;
-          positionShip(calculatedPositions[0],calculatedPositions[1],shipType,shipType.shipDirection);
+          positionShip(calculatedPositions[0],calculatedPositions[1],shipType);
     }
    
 }
@@ -48,11 +48,15 @@ function establishComputerShips()
     const submarine = new establishShip("Submarine",3,null,null,1);
     const scout = new establishShip("Scout",2,null,null,1);
     let shipList = [battleShip, destroyer, carrier, submarine, scout];
+    
     console.log(shipList);
     shipList.forEach((item) =>
         initializeComputerShips(item,shipList)
       );
+      
       redCells(".computerCell",shipList);
+      
+
       return shipList;
 
 }
@@ -71,7 +75,7 @@ function redCells(cellClass,shipList)
     cells.forEach((element)=>{
         let column = parseInt(element.style.gridColumn.split("/")[0], 10);
         let row = parseInt(element.style.gridRow, 10);
-        if (calculateCollisions([row,row+1], [column,column+1], shipList,dummyShip) === true) {
+        if (calculateCollisions([row,row+1], [column,column+1], shipList,dummyShip).doesCollide === true) {
             element.style.backgroundColor = "rgb(157, 212, 6)";
             }
     })

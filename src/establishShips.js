@@ -5,7 +5,7 @@
   orinetateShipImage,
 } = require("./moveShipListeners");
  */
-import { calculateProposedPositions, positionShip, orinetateShipImage } from "./moveShipListeners.js";
+import { calculateProposedPositions, positionShip, orinetateShipImage } from "./checkShipPositions.js";
 
 
 function establishShip(name, length, image, deg90, startRow) {
@@ -17,6 +17,7 @@ function establishShip(name, length, image, deg90, startRow) {
   this.startRow = startRow;
   this.occupiedRows = null;
   this.occupiedColumns = null;
+  this.health = length;
 }
 
 //Create the ship img element and set styles

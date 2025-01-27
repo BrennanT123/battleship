@@ -13,8 +13,8 @@ import {
   establishShip,
   initializeShipLocations,
   populateGrid,
-} from "./positionShips";
-import { moveShip } from "./moveShipListeners";
+} from "./establishShips";
+import { moveShip } from "./checkShipPositions";
 import { establishComputerShips } from "./computerShips";
 import { startGame } from "./startGame";
 
@@ -65,7 +65,7 @@ populateGrid("#backgroundBoardComputer", 10,false);
 const cells = document.querySelectorAll(".userCell");
 const computerCells = document.querySelectorAll(".computerCell");
 //Button used to rotate the ships
-
+ 
 const rotateButton = document.querySelector("#rotate");
 //Select the buttons that will be used to position each ship
 const pBattleship = document.querySelector("#pbattleship");
@@ -109,7 +109,8 @@ pScout.addEventListener("click", () => {
 });
 
 let computerShipList = establishComputerShips();
+
 console.log(computerShipList)
 
 const startButton = document.querySelector("#start");
-startButton.addEventListener("click",()=> startGame(gameText,cells,computerCells,shipList,computerShipList));
+startButton.addEventListener("click",()=> startGame(gameText,userBoard,computerCells,shipList,computerShipList));
