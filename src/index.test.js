@@ -4,6 +4,7 @@ import {
   checkValidPosition,
 } from "./checkShipPositions.js";
 import { establishShip } from "./establishShips.js";
+import { checkGameOver } from "./shotLogic.js";
 
 //Test calculate proposed positions function
 
@@ -73,3 +74,22 @@ test("Tests initializeShipLocations constructor", () => {
   initializeShipLocations(battleShip);
   expect(battleShip.occupiedRows).toEqual([1, 1]);
 });
+
+test("Checks the gameOver check function", () => {
+  let rows = [7, 8];
+  let columns = [2, 4];
+  let ship1 = {
+    occupiedRows: [7, 8],
+    occupiedColumns: [3, 7],
+    name: "dummy1",
+    health: 0
+  };
+  let ship2 = {
+    occupiedRows: [2, 2],
+    occupiedColumns: [1, 4],
+    name: "dummy2",
+    health: 0
+  };
+  let shipList = [ship1, ship2];
+  expect(checkGameOver(shipList)).toBeTruthy();
+})

@@ -21,15 +21,16 @@ function startGame(
 
 
   //initialize object for the last computer shot 
-  let lastComputerShot = 
+  let computerState = 
   {
-    didHit: false,
+    activeTarget: null,
+    initialHit: false,
     shipHit: null
   }
 
 
   //Start game loop by sending all the necesary variables to the shot logic functions
-takeShot(lastComputerShot,userShipList,instructions,userGrid,computerGrid,computerShipList);
+takeShot(computerState,userShipList,instructions,userGrid,computerGrid,computerShipList);
 
 
 

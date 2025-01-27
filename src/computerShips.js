@@ -42,7 +42,7 @@ function generateRandomCoords()
 //Creates computer ship objects
 function establishComputerShips()
 {
-    const battleShip = new establishShip("BattleShip",4,null,null,1);
+    const battleShip = new establishShip("Battleship",4,null,null,1);
     const destroyer = new establishShip("Destroyer",3,null,null,1);
     const carrier = new establishShip("Carrier",5,null,null,1);
     const submarine = new establishShip("Submarine",3,null,null,1);

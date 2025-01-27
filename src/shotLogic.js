@@ -1,7 +1,7 @@
 import { calculateProposedPositions, moveShip, positionShip, calculateCollisions, orinetateShipImage,checkValidPosition } from "./checkShipPositions"
 import { generateRandomCoords } from "./computerShips";
 
-function takeShot(lastShot,userShipList,instructions,userGrid,computerGrid,computerShipList) {
+function takeShot(computerState,userShipList,instructions,userGrid,computerGrid,computerShipList) {
   const eventHandlers = new Map();
   computerGrid.forEach((element) => {
     //Define the event listeners. Enter and leave are pure visual listeners. Click is use to establish new position
@@ -12,10 +12,16 @@ function takeShot(lastShot,userShipList,instructions,userGrid,computerGrid,compu
       element.style.filter = "none";
     };
     const clickOnCell = () => {
+      if(element.classList.contains("alreadySelected"))
+      {
+        instructions.textContent = "Cannot select square";
+        return;
+      }
       //Get the column and row for the clicked cell
       let column = parseInt(element.style.gridColumn.split("/")[0], 10);
       let row = parseInt(element.style.gridRow, 10);
       element.style.filter = "none";
+      element.classList.add("alreadySelected");
       checkShot([row,column],computerShipList,instructions,element);
       
 
@@ -29,7 +35,7 @@ function takeShot(lastShot,userShipList,instructions,userGrid,computerGrid,compu
       });
       //Clear the map of event handlers
       eventHandlers.clear();
-      nextTurn(computerShot,lastShot,userShipList,instructions,userGrid,computerGrid,computerShipList);
+      nextTurn(computerShot,computerState,userShipList,instructions,userGrid,computerGrid,computerShipList);
     };
 
 
@@ -45,16 +51,16 @@ function takeShot(lastShot,userShipList,instructions,userGrid,computerGrid,compu
 
 }
 
-function computerShot(lastShot,userShipList,instructions,userGrid,computerGrid,computerShipList)
+function computerShot(computerState,userShipList,instructions,userGrid,computerGrid,computerShipList)
 {
 
   const hitCell = document.createElement("div");
-  console.log(lastShot.didHit);
+  console.log(computerState.didHit);
   console.log("COMPUTER TURN");
 
     //Last shot is if the computer has recenlty hit a shit and not sunk it. 
     //If true, the computer will use basic logic to try to sink the ship.
-    if(lastShot.didHit === false)
+    if(!computerState.activeTarget)
     {
         const generatedCoords = generateRandomCoords();
         const selectedRow = generatedCoords[0];
@@ -63,15 +69,29 @@ function computerShot(lastShot,userShipList,instructions,userGrid,computerGrid,c
       
         const newHit = checkShot(generatedCoords,userShipList,instructions,hitCell);
         userGrid.appendChild(hitCell);
-        lastShot.didHit = newHit; //Stores value for true or false based on if it was hit
 
-    }else if(lastShot.didHit === true)
-    {
-      console.log("no logic here yet");
-    }
+        if(newHit.doesCollide === true)///modifies active target if hit
+        {
+          //Placeholder to add computer logic
+        }
 
-    setTimeout(() => nextTurn(takeShot,lastShot,userShipList,instructions,userGrid,computerGrid,computerShipList),2000)
+    setTimeout(() => nextTurn(takeShot,computerState,userShipList,instructions,userGrid,computerGrid,computerShipList),2000)
 }
+}
+
+//Function intended to be used to add computer logic 
+/* function setComputerTarget(shot,computerState)
+{
+  if(!computerState.activeTarget)
+  {
+    computerState.activeTarget={
+    initialHit: shot,
+    direction: null
+    };
+  }else{
+    computerState.activeTarget = 
+  }
+} */
 
 
 function checkShot(coords,shipList,instructions,element)
@@ -97,16 +117,27 @@ function checkShot(coords,shipList,instructions,element)
       if ((didCollide.doesCollide) === true) {
         instructions.textContent = "HIT!";
         instructions.classList.add("flash-red");
+        didCollide.shipCollided.health = didCollide.shipCollided.health-1;
         setTimeout(() => {
           instructions.classList.remove("flash-red");
           instructions.textContent = " ";
+          if(didCollide.shipCollided.health === 0){
+            instructions.textContent = `${didCollide.shipCollided.name} sunk`;
+          }
         }, 1000);
 
-
+        console.log(shipList);
         element.style.backgroundColor = "rgb(231, 0, 0)";
-        return true;
-      }else{
+        if(checkGameOver(shipList) ===true){
+          
+          instructions.textContent = "Game Over";
+          gameOver();
+          return;
+        };
+     
 
+        return didCollide;
+      }else{
         instructions.textContent = "MISS";
         instructions.classList.add("flash-green");
         setTimeout(() => {
@@ -114,22 +145,33 @@ function checkShot(coords,shipList,instructions,element)
           instructions.textContent = " ";
         }, 1000);
         element.style.backgroundColor = "rgb(54, 231, 0)";
-        return false;
+        return didCollide;
       }
 
 
 }
-function nextTurn(nextUp, lastShot, userShipList, instructions, userGrid, computerGrid, computerShipList) {
+
+function checkGameOver(shipList)
+{
+  if (shipList.every(element => element.health === 0)) {
+    return true;
+  }
+}
+function nextTurn(nextUp, computerState, userShipList, instructions, userGrid, computerGrid, computerShipList) {
   const nextTurnButton = document.querySelector("#nextTurn");
   nextTurnButton.style.display = "block";
   function handleClick() {
     //Hide the button
     nextTurnButton.style.display = "none";
     //Call next turn funciton 
-    nextUp(lastShot, userShipList, instructions, userGrid, computerGrid, computerShipList);
+    nextUp(computerState, userShipList, instructions, userGrid, computerGrid, computerShipList);
     nextTurnButton.removeEventListener("click", handleClick);
   }
   nextTurnButton.addEventListener("click", handleClick);
 }
-export { takeShot, checkShot, computerShot,nextTurn };
+function gameOver()
+{
+  console.log("GameOver");
+};
+export { takeShot, checkShot, computerShot,nextTurn,checkGameOver };
 
