@@ -1,5 +1,4 @@
 import { takeShot, computerShot,nextTurn } from "./shotLogic";
-
 //Clears placement buttons and starts game logic
 function startGame(
   instructions,

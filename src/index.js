@@ -18,6 +18,10 @@ import { moveShip } from "./checkShipPositions";
 import { establishComputerShips } from "./computerShips";
 import { startGame } from "./startGame";
 
+establishGame()
+
+function establishGame()
+{
 //initialize ship objects.
 const battleShip = new establishShip(
   "BattleShip",
@@ -114,3 +118,7 @@ console.log(computerShipList)
 
 const startButton = document.querySelector("#start");
 startButton.addEventListener("click",()=> startGame(gameText,userBoard,computerCells,shipList,computerShipList));
+
+}
+
+export {establishGame}

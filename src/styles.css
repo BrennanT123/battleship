@@ -176,3 +176,18 @@ body{
    
 
 }
+
+
+#playAgain
+{
+    border-radius: 16px;
+    border: rgb(5, 139, 0) 4px dashed;
+    background-color: rgb(137, 240, 128);
+    height: 32px;
+    margin: 5px;
+    text-align: center;
+    align-content: center;
+    width: 20ch;
+    justify-self: center;
+    display: none;
+}

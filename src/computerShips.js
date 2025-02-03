@@ -84,4 +84,4 @@ function redCells(cellClass,shipList)
 
 
 }
-export {establishComputerShips, generateRandomCoords};
+export {establishComputerShips, generateRandomCoords, redCells, initializeComputerShips};

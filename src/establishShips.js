@@ -5,7 +5,7 @@
   orinetateShipImage,
 } = require("./moveShipListeners");
  */
-import { calculateProposedPositions, positionShip, orinetateShipImage } from "./moveShipListeners.js";
+import { calculateProposedPositions, positionShip, orinetateShipImage } from "./checkShipPositions";
 
 
 function establishShip(name, length, image, deg90, startRow) {
